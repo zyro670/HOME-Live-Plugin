@@ -24,13 +24,17 @@ public static class PokeHandler
         var filename = pkh.GetFileName();
         if (format is DumpFormat.Encrypted or DumpFormat.EncAndDec)
         {
+            var encryptedPath = format == DumpFormat.EncAndDec ? Path.Combine(path, "Encrypted") : path;
+            Directory.CreateDirectory(encryptedPath);
             var ext = $".eh{pkh.DataVersion}";
-            File.WriteAllBytes($"{Path.Combine(path, filename)}{ext}", pkh.EncryptedData);
+            File.WriteAllBytes($"{Path.Combine(encryptedPath, filename)}{ext}", pkh.EncryptedData);
         }
         if (format is DumpFormat.Decrypted or DumpFormat.EncAndDec)
         {
+            var decryptedPath = format == DumpFormat.EncAndDec ? Path.Combine(path, "Decrypted") : path;
+            Directory.CreateDirectory(decryptedPath);
             var ext = $".ph{pkh.DataVersion}";
-            File.WriteAllBytes($"{Path.Combine(path, filename)}{ext}", pkh.Data);
+            File.WriteAllBytes($"{Path.Combine(decryptedPath, filename)}{ext}", pkh.Data);
         }
     }
 
